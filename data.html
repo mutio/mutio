@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en' ng-app>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no' charset="UTF-8">
+  <link href="reset.css" rel="stylesheet">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="lib/angular.min.js"></script>
+  <script src="lib/jquery.parse.min.js"></script>
+  <script src="lib/FileSaver.js"></script>
+  <script src="app/data.js"></script>
+  <meta charset=utf-8 />
+  <title>mutio</title>
+  <style>
+    body {
+      font-family: helvetica;
+      padding: 20px;
+    }
+    .file_area {
+      text-align: center;
+    }
+    #input_file {
+      padding: 20px;
+      border: 4px dotted #aaa;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    #count {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class='container' ng-controller='DataCtrl' ng-init="init()">
+    <div class='file_area'>
+      <input type='file' id="input_file" onchange="angular.element(this).scope().fileChanged(this)" />
+    </div>
+    <pre id="count">Drop CSV above to generate counts.</pre>
+    <input type='button' id='download' value='Download Variants' ng-click="download()" />
+  </div>
+</body>
+</html>
