@@ -1,24 +1,57 @@
 @import url('http://fonts.googleapis.com/css?family=Lato:400,300,700,900');
 
-body {
-  font-family: sans-serif, helvetica;
-  padding: 20px;
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Lato', sans-serif, helvetica;
 }
 
-body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: 'Lato';
+body {
+  padding-top: 85px;
+  // background-color: #70B9B0;
 }
 
 .file_area {
-  text-align: center;
+  // text-align: center;
 }
 
 #input_file {
-  padding: 20px;
-  border: 1px dotted #aaa;
+  padding: 55px;
+  border: 1px dashed #aaa;
   width: 100%;
   margin-bottom: 20px;
 }
 #count {
   font-weight: bold;
+}
+
+// Overrides
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  .panel-footer {
+    background-color: #fff;
+  }
+}
+
+.navbar {
+  background-color: #70B9B0;
+}
+
+.logo {
+  h1 {
+    color: #fff;
+    margin-top: 5px;
+  }
+}
+
+pre, .btn {
+  border-radius: 0;
+}
+
+pre {
+  background-color: #fff;
 }
