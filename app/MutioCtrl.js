@@ -1,4 +1,3 @@
-
 function MutioCtrl($scope) {
 
   var M = null;
