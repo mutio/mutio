@@ -20,11 +20,11 @@ function MutioCtrl($scope) {
         M.titlecase("first_name"),
         M.titlecase("last_name"),
         M.create("First Name Length", function(r){
-          r["first_name"].length;
+          return r["first_name"].length;
         }),
         M.alter("subscribed", function(r){
           return (r["subscribed"] == "true") ? "yes" : "no" ;
-        })
+        }),
       ],
       outputs: [
         {
