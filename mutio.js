@@ -52,12 +52,6 @@ Mutio.prototype.rename = function(map) {
   }
 }
 
-Mutio.prototype.csvFromString = function(data, filename) {
-  filename = filename += ".csv";
-  var blob = new Blob([data], {type: "text/csv;charset=utf-8"});
-  saveAs(blob, filename);
-};
-
 Mutio.prototype.processHeader = function(row, transforms) {
   for (var i in transforms) {
     t = transforms[i];

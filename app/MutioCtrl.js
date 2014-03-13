@@ -14,29 +14,29 @@ function MutioCtrl($scope) {
       validations: [],
       transforms: [
         M.rename({
-          "column1":"First Name",
-          "column2":"Last Name",
+          "first_name":"First Name",
+          "last_name":"Last Name",
         }),
-        M.titlecase("column1"),
-        M.titlecase("column2"),
+        M.titlecase("first_name"),
+        M.titlecase("last_name"),
         M.create("First Name Length", function(r){
-          r["column1"].length;
+          r["first_name"].length;
         }),
-        M.alter("column2", function(r){
-          return (r["column2"] == "") ? "Empty!" : r["column2"] ;
+        M.alter("subscribed", function(r){
+          return (r["subscribed"] == "true") ? "yes" : "no" ;
         })
       ],
       outputs: [
         {
           name: "All",
           filter: function(r){
-            return r["Optout Email"] == "TRUE";
+            return true;
           }
         },
         {
-          name: "Chuck\"s Family",
+          name: "Chuck\'s Family",
           filter: function(r){
-            return r["column2"] == "Norris";
+            return r["last_name"] == "Norris";
           }
         }
       ]
@@ -80,6 +80,12 @@ function MutioCtrl($scope) {
     }
   }
 
+  function csvDownload(data, filename) {
+    filename = filename += ".csv";
+    var blob = new Blob([data], {type: "text/csv;charset=utf-8"});
+    saveAs(blob, filename);
+  };
+
   $scope.csv = null;
 
   $scope.fileChanged = function() {
@@ -91,19 +97,19 @@ function MutioCtrl($scope) {
     var csv = $scope.csv;
 
     // Compile all our data
-    var header = processHeader(csv.results.fields, config.transforms);
+    var header = M.processHeader(csv.results.fields, config.transforms);
 
     for (var i in config.outputs) {
       var output = config.outputs[i];
       var rows = csv.results.rows.filter(output.filter);
 
-      var data = csvRowToString(header);
+      var data = M.csvRowToString(header);
       for (var j in rows) {
-        var processedRow = processRow(rows[j], config.transforms);
-        data += csvRowToString(processedRow);
+        var processedRow = M.processRow(rows[j], config.transforms);
+        data += M.csvRowToString(processedRow);
       }
-      // Reduce array to string and provide CSV download to user
-      csvFromString(data, output.name);
+      // Provide CSV as download to user
+      csvDownload(data, output.name);
     }
   }
 }
