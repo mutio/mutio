@@ -3,9 +3,12 @@
 <head>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no' charset="UTF-8">
 
-  <!-- CSS -->
-  <link href="css/reset.css" rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+  <!-- Styles -->
   <link rel='stylesheet/less' type='text/css' href='css/styles.css.less'/>
+
 
   <!-- JS Libs -->
   <script language='javascript' type='text/javascript' src='lib/less.min.js'></script>
@@ -19,26 +22,9 @@
   <script language='javascript' type='text/javascript' src="app/MutioCtrl.js"></script>
 
   <title>mutio</title>
-  <style>
-    body {
-      font-family: helvetica;
-      padding: 20px;
-    }
-    .file_area {
-      text-align: center;
-    }
-    #input_file {
-      padding: 20px;
-      border: 4px dotted #aaa;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    #count {
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body>
+  <h1>mut.io</h1>
   <div class='container' ng-controller='MutioCtrl' ng-init="init()">
     <div class='file_area'>
       <input type='file' id="input_file" onchange="angular.element(this).scope().fileChanged(this)" />
