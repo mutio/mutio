@@ -40,6 +40,22 @@ function MutioCtrl($scope) {
         }
       ]
     };
+    $scope.setDefaultData();
+  }
+
+  $scope.setDefaultData = function() {
+    $.get('test/sample-input.csv', function(csv){
+      M.parseCSV(csv);
+      $scope.updateCounts();
+    });
+  }
+
+  $scope.updateCounts = function() {
+    // Display output counts
+    var counts = M.counts();
+    $("#count").text(counts.reduce(function(p, n){
+      return p + n.name + ": " + n.count + "\n";
+    }, ''));
   }
 
   $scope.readFile = function(input) {
@@ -48,15 +64,8 @@ function MutioCtrl($scope) {
       // A CSV has been selected, read and parse it
       var FR = new FileReader();
       FR.onload = function(e) {
-
         M.parseCSV(e.target.result);
-
-        // Display output counts
-        var counts = M.counts();
-        $("#count").text(counts.reduce(function(p, n){
-          return p + n.name + ": " + n.count + "\n";
-        }, ''));
-
+        $scope.updateCounts();
       };
       FR.readAsText(input.files[0]);
 
