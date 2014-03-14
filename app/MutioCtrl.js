@@ -5,42 +5,19 @@ function MutioCtrl($scope) {
   require(["mutio"], function(){
     M = new Mutio();
     $scope.configure();
+    $scope.setDefaultData();
   });
 
   $scope.configure = function() {
-    M.config = {
-      name: "Welcome Data",
-      validations: [],
-      transforms: [
-        M.rename({
-          "first_name":"First Name",
-          "last_name":"Last Name",
-        }),
-        M.titlecase("first_name"),
-        M.titlecase("last_name"),
-        M.create("First Name Length", function(r){
-          return r["first_name"].length;
-        }),
-        M.alter("subscribed", function(r){
-          return (r["subscribed"] == "true") ? "yes" : "no" ;
-        }),
-      ],
-      outputs: [
-        {
-          name: "All",
-          filter: function(r){
-            return true;
-          }
-        },
-        {
-          name: "Chuck\'s Family",
-          filter: function(r){
-            return r["last_name"] == "Norris";
-          }
-        }
-      ]
-    };
-    $scope.setDefaultData();
+    // Bring in textarea value as config
+    // @ISSUE might be better to use Angular binding rather than jQuery here
+    eval("var config = "+$('#config').val());
+    M.configure(config);
+  }
+
+  $scope.updateConfig = function() {
+    $scope.configure();
+    $scope.updateCounts();
   }
 
   $scope.setDefaultData = function() {

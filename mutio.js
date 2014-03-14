@@ -4,6 +4,10 @@ function Mutio() {
   this.csv = {};
 }
 
+Mutio.prototype.configure = function(config) {
+  this.config = config;
+}
+
 Mutio.prototype.titlecase = function(field) {
   return {
     description: "Convert "+field+" to titlecase",
@@ -126,10 +130,4 @@ Mutio.prototype.counts = function(config) {
     counts.push({name:output.name, count:count(output.filter)});
   }
   return counts;
-  // @STUB
-  return [
-    {name:'Total',count:123},
-    {name:'All', count:10},
-    {name:'Chuck\'s Family', count:3}
-  ];
 }

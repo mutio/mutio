@@ -54,7 +54,39 @@
           </div>
           <div class='col-md-8'>
             <p>Configuration</p>
-            <textarea class="form-control" rows="6"></textarea>
+            <textarea id="config" class="form-control" rows="6">{
+  name: "Welcome Data",
+  validations: [],
+  transforms: [
+    M.rename({
+      "first_name":"First Name",
+      "last_name":"Last Name",
+    }),
+    M.titlecase("first_name"),
+    M.titlecase("last_name"),
+    M.create("First Name Length", function(r){
+      return r["first_name"].length;
+    }),
+    M.alter("subscribed", function(r){
+      return (r["subscribed"] == "true") ? "yes" : "no" ;
+    }),
+  ],
+  outputs: [
+    {
+      name: "All",
+      filter: function(r){
+        return true;
+      }
+    },
+    {
+      name: "Chuck\'s Family",
+      filter: function(r){
+        return r["last_name"] == "Norris";
+      }
+    }
+  ]
+}
+</textarea>
           </div>
         </div>
 
@@ -67,7 +99,7 @@
           </div>
           <div class='col-md-4'>
             <div class="btn-group pull-right">
-              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Preview</button>
+              <button ng-click="updateConfig()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Update</button>
               <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"> Reset</button>
             </div>
           </div>
