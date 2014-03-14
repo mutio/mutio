@@ -81,3 +81,23 @@ Mutio.prototype.csvRowToString = function(row) {
     return p + "," + n;
   }) + "\n";
 };
+
+Mutio.prototype.generateOutputs = function(config, csv) {
+  var outputs = [];
+  // Compile all our data
+  var header = this.processHeader(csv.results.fields, config.transforms);
+  // Generate CSV string for each config item
+  for (var i in config.outputs) {
+    var output = config.outputs[i];
+    var rows = csv.results.rows.filter(output.filter);
+
+    var data = this.csvRowToString(header);
+    for (var j in rows) {
+      var processedRow = this.processRow(rows[j], config.transforms);
+      data += this.csvRowToString(processedRow);
+    }
+    outputs.push({name: output.name, csv: data});
+  }
+  return outputs;
+}
+

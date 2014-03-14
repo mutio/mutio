@@ -90,25 +90,12 @@ function MutioCtrl($scope) {
   $scope.fileChanged = function() {
     readFile($("#input_file")[0], $scope.config);
   }
+
+  // Generate outputs and trigger CSV download for each
   $scope.download = function() {
-
-    var config = $scope.config;
-    var csv = $scope.csv;
-
-    // Compile all our data
-    var header = M.processHeader(csv.results.fields, config.transforms);
-
-    for (var i in config.outputs) {
-      var output = config.outputs[i];
-      var rows = csv.results.rows.filter(output.filter);
-
-      var data = M.csvRowToString(header);
-      for (var j in rows) {
-        var processedRow = M.processRow(rows[j], config.transforms);
-        data += M.csvRowToString(processedRow);
-      }
-      // Provide CSV as download to user
-      csvDownload(data, output.name);
+    var outputs = M.generateOutputs($scope.config, $scope.csv);
+    for (var i in outputs) {
+      csvDownload(outputs[i].csv, outputs[i].name);
     }
   }
 }
