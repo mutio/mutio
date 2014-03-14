@@ -4,11 +4,11 @@ function MutioCtrl($scope) {
 
   require(["mutio"], function(){
     M = new Mutio();
-    $scope.config();
+    $scope.configure();
   });
 
-  $scope.config = function() {
-    $scope.config = {
+  $scope.configure = function() {
+    M.config = {
       name: "Welcome Data",
       validations: [],
       transforms: [
@@ -42,37 +42,26 @@ function MutioCtrl($scope) {
     };
   }
 
-  function readFile(input, config) {
+  $scope.readFile = function(input) {
 
     if (input.files && input.files[0] && input.files[0].name.match(/csv$/)) {
+      // A CSV has been selected, read and parse it
       var FR = new FileReader();
       FR.onload = function(e) {
 
-        // Locate performance issues?
-        // http://stackoverflow.com/a/12408593
-        $scope.csv = $.parse(e.target.result, {
-          delimiter: ",",
-          header: true,
-          dynamicTyping: false
-        });
+        M.parseCSV(e.target.result);
 
-        $scope.csv.count = function(f) {
-          return this.results.rows.filter(f).length;
-        }
-
-        var stats = "";
-        stats += "Total: "+$scope.csv.results.rows.length+"\n";
-        for (var i in config.outputs) {
-          output = config.outputs[i];
-          stats += output.name+": "+$scope.csv.count(output.filter)+"\n";
-        }
-        $("#count").text(stats);
+        // Display output counts
+        var counts = M.counts();
+        $("#count").text(counts.reduce(function(p, n){
+          return p + n.name + ": " + n.count + "\n";
+        }, ''));
 
       };
-      FR.readAsText( input.files[0] );
+      FR.readAsText(input.files[0]);
 
     } else {
-      // Notify our user of unsupported file
+      // Disallowed file selected
       alert("Only files of type .csv are supported currently.");
       // Clear our file field
       $(input).replaceWith($(input).clone(true));
@@ -85,17 +74,15 @@ function MutioCtrl($scope) {
     saveAs(blob, filename);
   };
 
-  $scope.csv = null;
-
   $scope.fileChanged = function() {
-    readFile($("#input_file")[0], $scope.config);
+    $scope.readFile($("#input_file")[0]);
   }
 
   // Generate outputs and trigger CSV download for each
   $scope.download = function() {
-    var outputs = M.generateOutputs($scope.config, $scope.csv);
-    for (var i in outputs) {
-      csvDownload(outputs[i].csv, outputs[i].name);
-    }
+    var outputs = M.generateOutputs();
+    outputs.map(function(output){
+      csvDownload(output.csv, output.name);
+    });
   }
 }

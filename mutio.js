@@ -1,5 +1,8 @@
 
-function Mutio() {}
+function Mutio() {
+  this.config = {};
+  this.csv = {};
+}
 
 Mutio.prototype.titlecase = function(field) {
   return {
@@ -52,6 +55,16 @@ Mutio.prototype.rename = function(map) {
   }
 }
 
+Mutio.prototype.parseCSV = function(csv) {
+  // Locate performance issues?
+  // http://stackoverflow.com/a/12408593
+  this.csv = $.parse(csv, {
+    delimiter: ",",
+    header: true,
+    dynamicTyping: false
+  });
+}
+
 Mutio.prototype.processHeader = function(row, transforms) {
   for (var i in transforms) {
     t = transforms[i];
@@ -82,18 +95,18 @@ Mutio.prototype.csvRowToString = function(row) {
   }) + "\n";
 };
 
-Mutio.prototype.generateOutputs = function(config, csv) {
+Mutio.prototype.generateOutputs = function() {
   var outputs = [];
   // Compile all our data
-  var header = this.processHeader(csv.results.fields, config.transforms);
+  var header = this.processHeader(this.csv.results.fields, this.config.transforms);
   // Generate CSV string for each config item
-  for (var i in config.outputs) {
-    var output = config.outputs[i];
-    var rows = csv.results.rows.filter(output.filter);
+  for (var i in this.config.outputs) {
+    var output = this.config.outputs[i];
+    var rows = this.csv.results.rows.filter(output.filter);
 
     var data = this.csvRowToString(header);
     for (var j in rows) {
-      var processedRow = this.processRow(rows[j], config.transforms);
+      var processedRow = this.processRow(rows[j], this.config.transforms);
       data += this.csvRowToString(processedRow);
     }
     outputs.push({name: output.name, csv: data});
@@ -101,3 +114,22 @@ Mutio.prototype.generateOutputs = function(config, csv) {
   return outputs;
 }
 
+Mutio.prototype.counts = function(config) {
+  var counts = [];
+  var that = this;
+  var count = function(f) {
+    return that.csv.results.rows.filter(f).length;
+  }
+  counts.push({name:'Total', count: this.csv.results.rows.length});
+  for (var i in this.config.outputs) {
+    output = this.config.outputs[i];
+    counts.push({name:output.name, count:count(output.filter)});
+  }
+  return counts;
+  // @STUB
+  return [
+    {name:'Total',count:123},
+    {name:'All', count:10},
+    {name:'Chuck\'s Family', count:3}
+  ];
+}
