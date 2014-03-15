@@ -28,181 +28,156 @@
 </head>
 
 <body>
-<div class="navbar navbar-default navbar-static-top navbar-fixed-top" role="navigation">
+  <!-- HEADER -->
+  <div class="navbar navbar-default navbar-static-top navbar-fixed-top" role="navigation">
+    <!-- <div> -->
+    <span class="pull-left glyphicon glyphicon-cog sidebar-toggle"></span>
+    <!-- </div> -->
     <div class="container logo">
       <h1>mut.io</h1>
     </div>
   </div>
-  <div id='page-wrapper' class='container' ng-controller='MutioCtrl' ng-init="init()">
 
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-md-8">
-            <h4 class="panel-title">Setup</h4>
-          </div>
-          <div class="col-md-4">
-          <span class="glyphicon glyphicon-info-sign pull-right"></span>
-          </div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class='col-md-4 file_area'>
-            <p>Drop CSV below to generate counts</p>
-            <input type='file' id="input_file" onchange="angular.element(this).scope().fileChanged(this)" />
-          </div>
-          <div class='col-md-8'>
-            <p>Configuration</p>
-            <textarea id="config" class="form-control" rows="6">{
-  name: "Welcome Data",
-  validations: [],
-  transforms: [
-    M.rename({
-      "first_name":"First Name",
-      "last_name":"Last Name",
-    }),
-    M.titlecase("first_name"),
-    M.titlecase("last_name"),
-    M.create("First Name Length", function(r){
-      return r["first_name"].length;
-    }),
-    M.alter("subscribed", function(r){
-      return (r["subscribed"] == "true") ? "yes" : "no" ;
-    }),
-  ],
-  outputs: [
-    {
-      name: "All",
-      filter: function(r){
-        return true;
-      }
-    },
-    {
-      name: "Chuck\'s Family",
-      filter: function(r){
-        return r["last_name"] == "Norris";
-      }
-    }
-  ]
-}
-</textarea>
-          </div>
-        </div>
+  <!-- PAGE WRAPPER -->
+  <div class="container-fluid page-wrapper">
+    <div class="row">
+      <div class="col-md-3 mutio-sidebar">
 
-      </div>
-      <div class="panel-footer">
-        <div class="row">
-          <div class='col-md-8'>
-            <pre class="bg-default" id='count'>No files loaded.</pre>
-
+        <div class="panel panel-success-light">
+          <div class="panel-heading">
+            <h3 class="panel-title">Input</h3>
           </div>
-          <div class='col-md-4'>
-            <div class="btn-group pull-right">
-              <button ng-click="updateConfig()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Update</button>
-              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"> Reset</button>
+          <div class="panel-body">
+            <div class='file_area'>
+              <p>Drop CSV below to generate counts</p>
+              <input type='file' id="input_file" onchange="angular.element(this).scope().fileChanged(this)" />
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-md-8">
-            <h4 class="panel-title">Preview</h4>
+        <div class="panel panel-success-light">
+          <div class="panel-heading">
+            <h3 class="panel-title">Configuration</h3>
           </div>
-          <div class="col-md-4">
-            <span class="glyphicon glyphicon-fullscreen pull-right"></span>
+          <div class="panel-body">
+            <textarea id="config" class="form-control" rows="6"></textarea>
           </div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-12">
-            <caption>Original Data</caption>
-            <table class="table table-striped table-hover table-responsive">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Column1</th>
-                  <th>Column2</th>
-                  <th>Column3</th>
-                  <th>Column4</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
-                </tr>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
-                </tr>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="col-md-12">
-            <caption>Modified Data</caption>
-            <table class="table table-striped table-hover table-responsive">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Column1</th>
-                  <th>Column2</th>
-                  <th>Column3</th>
-                  <th>Column4</th>
-                  <th>Column5</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
-                </tr>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
-                </tr>
-                <tr>
-                  <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title">Export</h3>
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div ng-repeat="i in output">
-              <!-- <DISPLAY OUTPUTS HERE> -->
-              <button type="button" id='download' class="btn btn-primary btn-sm pull-left" ng-click="download()">Download All</button>
-            </div>
-            <div class="btn-group" id='tooltip' data-toggle="tooltip" data-placement="top" title="Click to download">
-              <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">This is my custom output</button>
-              <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Chuck's family</button>
-              <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Another download</button>
-              <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Angular download</button>
+          <div class="panel-footer">
+            <div class="btn-group">
+              <button ng-click="updateConfig()" type="button" class="btn btn-info"><span class="glyphicon glyphicon-eye-open"></span> Update</button>
+              <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh"> Reset</button>
             </div>
           </div>
-          <div class="col-md-6">
-            <button type="button" id='download' class="btn btn-primary pull-right" ng-click="download()"><span class="glyphicon glyphicon-cloud-download"></span> Download All</button>
+        </div>
+
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="col-md-9 mutio-preview">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Preview</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <caption>Original Data</caption>
+                <table class="table table-striped table-hover table-responsive preview-orig">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Column1</th>
+                      <th>Column2</th>
+                      <th>Column3</th>
+                      <th>Column4</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>data here</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>data here</td> <td>data here</td><td>4</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>data here</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>data here</td> <td>3</td><td>4</td><td>5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="col-md-12">
+                <caption>Modified Data</caption>
+                <table class="table table-striped table-hover table-responsive preview-modif">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Column1</th>
+                      <th>Column2</th>
+                      <th>Column3</th>
+                      <th>Column4</th>
+                      <th>Column5</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>1</td> <td>2</td> <td>3</td><td>4</td><td>5</td><td>6</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
           </div>
         </div>
+        <pre class="bg-default" id='count'>No files loaded.</pre>
       </div>
-    </div>
-  </div> <!-- END Container  -->
 
+
+
+
+    </div> <!-- END PREVIEW -->
+  </div>
+</div>
+
+
+
+
+<!-- FOOTER -->
+<div class='sticky-footer'>
+  <div class="btn-group" id='tooltip' data-toggle="tooltip" data-placement="top" title="Click to download">
+    <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">This is my custom output</button>
+    <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Chuck's family</button>
+    <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Another download</button>
+    <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Angular download</button>
+  </div>
+
+  <button type="button" id='download' class="btn btn-primary pull-right" ng-click="download()"><span class="glyphicon glyphicon-cloud-download"></span> Download All</button>
+</div>
 
 </body>
 

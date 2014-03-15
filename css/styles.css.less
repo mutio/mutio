@@ -4,9 +4,98 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Lato', sans-serif, helvetica;
 }
 
-body {
-  padding-top: 85px;
+html, body {
   // background-color: #70B9B0;
+  height: 100%;
+}
+
+// Bootstrap overrides
+
+.navbar {
+  background-color: #70B9B0;
+  opacity: 0.90;
+  .sidebar-toggle {
+    font-size: 150% !important;
+    padding: 15px;
+    cursor: pointer;
+  }
+}
+
+pre, .btn {
+  border-radius: 0;
+}
+
+pre {
+  background-color: #fff;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 0px;
+  box-shadow: none;
+  // border-color:
+  padding-left: 0px;
+  margin: 0px;
+  .panel-heading {
+    border-radius: 0px;
+  }
+  .panel-footer {
+    background-color: #fff;
+    border-radius: 0px;
+  }
+}
+
+// END Bootstrap overrides
+
+
+// Mutio
+
+.logo {
+  h1 {
+    color: #fff;
+    margin-top: 5px;
+  }
+}
+
+.page-wrapper {
+  padding-top: 55px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 60px;
+
+
+  // Sidebar
+  .mutio-sidebar {
+    padding-right: 0px;
+    .panel {
+      background-color: #F5FFFA;
+      .panel-footer {
+        padding: 0px;
+        width: 100%;
+        border: none;
+        background-color: #F5FFFA;
+        .btn-group {
+          width: 100%;
+          height: 50px;
+          margin: 0px;
+          padding: 5px;
+          button {
+            width: 50%;
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+          }
+        }
+      }
+    }
+  }
+
+  // Preview (main content)
+  .mutio-preview {
+    padding-left: 0px;
+  }
+
 }
 
 .file_area {
@@ -19,40 +108,37 @@ body {
   width: 100%;
   margin-bottom: 20px;
 }
+
 #count {
   font-weight: bold;
 }
 
-// Overrides
-
-.panel {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  .panel-footer {
-    background-color: #fff;
-  }
+#download {
+  height: 100%;
 }
 
-.navbar {
+.panel-success-light {
+  .panel-heading {
+    background-color: #F5FFFA;
+  }
+
+}
+
+// Footer
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
   background-color: #70B9B0;
   opacity: 0.90;
-}
 
-.logo {
-  h1 {
-    color: #fff;
-    margin-top: 5px;
+  .btn-group {
+    height: 100%;
+    padding: 10px;
   }
+
 }
 
-pre, .btn {
-  border-radius: 0;
-}
 
-pre {
-  background-color: #fff;
-}
+
