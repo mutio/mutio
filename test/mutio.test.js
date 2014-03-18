@@ -10,7 +10,40 @@ $.ajax({
 });
 
 var M = new Mutio()
+M.configure({
+  name: "Welcome Data",
+  validations: [],
+  transforms: [
+    M.rename({
+      "first_name":"First Name",
+      "last_name":"Last Name",
+    }),
+    M.titlecase("first_name"),
+    M.titlecase("last_name"),
+    M.create("First Name Length", function(r){
+      return r["first_name"].length;
+    }),
+    M.alter("subscribed", function(r){
+      return (r["subscribed"] == "true") ? "yes" : "no" ;
+    }),
+  ],
+  outputs: [
+    {
+      name: "All",
+      filter: function(r){
+        return true;
+      }
+    },
+    {
+      name: "Chuck\'s Family",
+      filter: function(r){
+        return r["last_name"] == "Norris";
+      }
+    }
+  ]
+});
 M.parseCSV(sample_csv)
+
 
 describe("The CSV parser", function(){
 
@@ -20,6 +53,7 @@ describe("The CSV parser", function(){
 
 })
 
+// ORIGINAL
 describe("The original set of data", function(){
 
   it("should be retrievable in full", function(){
@@ -29,42 +63,43 @@ describe("The original set of data", function(){
   it("should be retrievable by row", function(){
 
     var asExpected = {
-      country: "Comoros",
-      email: "dpatterson@gigashots.gov",
-      first_name: "dorothy",
       id: "1",
-      ip_address: "230.68.162.110",
+      first_name: "dorothy",
       last_name: "patterson",
+      email: "dpatterson@gigashots.gov",
+      country: "Comoros",
+      ip_address: "230.68.162.110",
       subscribed: "false",
     }
-    expect(M.original(0)).toBe(asExpected)
+    expect(M.original(0)).toEqual(asExpected)
 
     asExpected = {
-      country: "Chad",
-      email: "ejames@thoughtstorm.org",
-      first_name: "chuck",
       id: "6",
-      ip_address: "79.12.207.108",
+      first_name: "chuck",
       last_name: "norris",
+      email: "ejames@thoughtstorm.org",
+      country: "Chad",
+      ip_address: "79.12.207.108",
       subscribed: "true",
     }
-    expect(M.original(9)).toBe(asExpected)
+    expect(M.original(5)).toEqual(asExpected)
 
     asExpected = {
-      country: "Mozambique",
-      email: "jwood@jatri.org",
-      first_name: "jimmy",
       id: "10",
-      ip_address: "146.138.186.12",
+      first_name: "jimmy",
       last_name: "wood",
+      email: "jwood@jatri.org",
+      country: "Mozambique",
+      ip_address: "146.138.186.12",
       subscribed: "false",
     }
-    expect(M.original(9)).toBe(asExpected)
+    expect(M.original(9)).toEqual(asExpected)
 
   })
 
 })
 
+// MODIFIED
 describe("The modified set of data", function(){
 
   it("should be retrievable in full", function(){
@@ -74,40 +109,40 @@ describe("The modified set of data", function(){
   it("should be retrievable by row", function(){
 
     var asExpected = {
+      id: "1",
+      first_name: "Dorothy",
+      last_name: "Patterson",
       country: "Comoros",
       email: "dpatterson@gigashots.gov",
-      first_name: "Dorothy",
-      id: "1",
       ip_address: "230.68.162.110",
-      last_name: "Patterson",
       subscribed: "no",
       'First Name Length': 7
     }
-    expect(M.modified(0)).toBe(asExpected)
+    expect(M.modified(0)).toEqual(asExpected)
 
     asExpected = {
-      country: "Chad",
-      email: "ejames@thoughtstorm.org",
-      first_name: "Chuck",
       id: "6",
-      ip_address: "79.12.207.108",
+      first_name: "Chuck",
       last_name: "Norris",
+      email: "ejames@thoughtstorm.org",
+      country: "Chad",
+      ip_address: "79.12.207.108",
       subscribed: "yes",
       'First Name Length': 5
     }
-    expect(M.modified(9)).toBe(asExpected)
+    expect(M.modified(5)).toEqual(asExpected)
 
     asExpected = {
-      country: "Mozambique",
-      email: "jwood@jatri.org",
-      first_name: "Jimmy",
       id: "10",
-      ip_address: "146.138.186.12",
+      first_name: "Jimmy",
       last_name: "Wood",
+      email: "jwood@jatri.org",
+      country: "Mozambique",
+      ip_address: "146.138.186.12",
       subscribed: "no",
       'First Name Length': 5
     }
-    expect(M.modified(9)).toBe(asExpected)
+    expect(M.modified(9)).toEqual(asExpected)
 
   })
 
