@@ -66,36 +66,36 @@
           </div>
           <div class="panel-body">
             <textarea id="config" class="form-control" rows="14">{
-              name: "Welcome Data",
-              validations: [],
-              transforms: [
-              M.rename({
-              "first_name":"First Name",
-              "last_name":"Last Name",
-            }),
-            M.titlecase("first_name"),
-            M.titlecase("last_name"),
-            M.create("First Name Length", function(r){
-            return r["first_name"].length;
-          }),
-          M.alter("subscribed", function(r){
-          return (r["subscribed"] == "true") ? "yes" : "no" ;
-        }),
-        ],
-        outputs: [
-        {
-        name: "All",
-        filter: function(r){
+  name: "Welcome Data",
+  validations: [],
+  transforms: [
+    M.rename({
+      "first_name":"First Name",
+      "last_name":"Last Name",
+    }),
+    M.titlecase("first_name"),
+    M.titlecase("last_name"),
+    M.create("First Name Length", function(r){
+      return r["first_name"].length;
+    }),
+    M.alter("subscribed", function(r){
+      return (r["subscribed"] == "true") ? "yes" : "no" ;
+    }),
+  ],
+  outputs: [
+    {
+      name: "All",
+      filter: function(r){
         return true;
       }
     },
     {
-    name: "Chuck\'s Family",
-    filter: function(r){
-    return r["last_name"] == "Norris";
-  }
-}
-]
+      name: "Chuck\'s Family",
+      filter: function(r){
+        return r["last_name"] == "Norris";
+      }
+    }
+  ]
 }
 
 </textarea>
