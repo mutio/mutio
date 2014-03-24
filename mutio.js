@@ -168,6 +168,15 @@ Mutio.prototype.originalFields = function (index) {
 }
 
 /**
+ * GET actions for modified fields
+ * @param   {mixed} index (optional) The index for a particular row
+ * @return  {mixed} An array of row objects, or a single row object
+ */
+Mutio.prototype.modifiedFields = function (index) {
+  return (this.isInt(index)) ? this._modified.fields[index] : this._modified.fields;
+}
+
+/**
  * GET actions for original data set
  * @param   {mixed} index (optional) The index for a particular row
  * @return  {mixed} An array of row objects, or a single row object

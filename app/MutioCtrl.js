@@ -31,10 +31,10 @@ function MutioCtrl($scope) {
       },
       async: false
     });
-    M.configure(conf);
+
+    $('#config').val(conf);
+    $scope.updateConfig();
   }
-
-
 
   $scope.updateCounts = function() {
     // Display output counts
@@ -80,11 +80,14 @@ function MutioCtrl($scope) {
       csvDownload(output.csv, output.name);
     });
   }
-  $scope.M = M = null;
-  scope = $scope;
+
   M = new Mutio();
   $scope.setDefaultData();
   $scope.originalFields = M.originalFields();
+  $scope.originalRows = M.original();
+  $scope.modifiedFields = M.modifiedFields();
+  $scope.modifiedRows = M.modified();
+
 }
 
 
