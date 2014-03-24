@@ -143,7 +143,7 @@ Mutio.prototype.counts = function(config) {
   var counts = [];
   var that = this;
   var count = function(f) {
-    return that.csv.results.rows.filter(f).length;
+    return that._original.results.rows.filter(f).length;
   }
   counts.push({name:'Total', count: this._original.results.rows.length});
   for (var i in this.config.outputs) {
@@ -157,6 +157,15 @@ Mutio.prototype.counts = function(config) {
 
 
 /* RESTful API */
+
+/**
+ * GET actions for original fields
+ * @param   {mixed} index (optional) The index for a particular row
+ * @return  {mixed} An array of row objects, or a single row object
+ */
+Mutio.prototype.originalFields = function (index) {
+  return (this.isInt(index)) ? this._original.results.fields[index] : this._original.results.fields;
+}
 
 /**
  * GET actions for original data set

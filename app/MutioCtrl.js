@@ -1,13 +1,5 @@
 function MutioCtrl($scope) {
 
-  var M = null;
-
-  require(["mutio"], function(){
-    M = new Mutio();
-    $scope.configure();
-    $scope.setDefaultData();
-  });
-
   $scope.configure = function() {
     // Bring in textarea value as config
     // @ISSUE might be better to use Angular binding rather than jQuery here
@@ -21,11 +13,28 @@ function MutioCtrl($scope) {
   }
 
   $scope.setDefaultData = function() {
-    $.get('test/sample-input.csv', function(csv){
-      M.parseCSV(csv);
-      $scope.updateCounts();
+    var sample_csv;
+    $.ajax({
+      url: 'test/sample-input.csv',
+      success: function(data){
+        sample_csv = data;
+      },
+      async: false
     });
+    M.parseCSV(sample_csv);
+
+    var conf;
+    $.ajax({
+      url: 'test/sample-config.txt',
+      success: function(data){
+        conf = data;
+      },
+      async: false
+    });
+    M.configure(conf);
   }
+
+
 
   $scope.updateCounts = function() {
     // Display output counts
@@ -71,4 +80,11 @@ function MutioCtrl($scope) {
       csvDownload(output.csv, output.name);
     });
   }
+  $scope.M = M = null;
+  scope = $scope;
+  M = new Mutio();
+  $scope.setDefaultData();
+  $scope.originalFields = M.originalFields();
 }
+
+
