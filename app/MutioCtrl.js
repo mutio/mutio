@@ -7,21 +7,7 @@ function MutioCtrl($scope) {
     M.configure(config);
   }
 
-  $scope.updateConfig = function() {
-    $scope.configure();
-    $scope.updateCounts();
-  }
-
   $scope.setDefaultData = function() {
-    var sample_csv;
-    $.ajax({
-      url: 'test/sample-input.csv',
-      success: function(data){
-        sample_csv = data;
-      },
-      async: false
-    });
-    M.parseCSV(sample_csv);
 
     var conf;
     $.ajax({
@@ -33,7 +19,19 @@ function MutioCtrl($scope) {
     });
 
     $('#config').val(conf);
-    $scope.updateConfig();
+    $scope.configure();
+
+    var sample_csv;
+    $.ajax({
+      url: 'test/sample-input.csv',
+      success: function(data){
+        sample_csv = data;
+      },
+      async: false
+    });
+    M.parseCSV(sample_csv);
+
+    $scope.updateCounts();
   }
 
   $scope.updateCounts = function() {
@@ -79,6 +77,10 @@ function MutioCtrl($scope) {
     outputs.map(function(output){
       csvDownload(output.csv, output.name);
     });
+  }
+
+  $scope.unsorted = function(obj){
+    return (!obj) ? [] : Object.keys(obj).slice(0,-1) ;
   }
 
   M = new Mutio();

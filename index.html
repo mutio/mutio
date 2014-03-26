@@ -99,7 +99,7 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat="row in originalRows">
-                      <td ng-repeat="(name,value) in row">{{value}}</td>
+                      <td ng-repeat="name in unsorted(row)" ng-init="value = row[name]">{{value}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -115,7 +115,7 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat="row in modifiedRows">
-                      <td ng-repeat="(name,value) in row">{{value}}</td>
+                      <td ng-repeat="name in unsorted(row)" ng-init="value = row[name]">{{value}}</td>
                     </tr>
                   </tbody>
                 </table>
