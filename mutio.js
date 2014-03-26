@@ -143,9 +143,9 @@ Mutio.prototype.counts = function(config) {
   var counts = [];
   var that = this;
   var count = function(f) {
-    return that._original.results.rows.filter(f).length;
+    return that._modified.rows.filter(f).length;
   }
-  counts.push({name:'Total', count: this._original.results.rows.length});
+  counts.push({name:'Total', count: this._modified.rows.length});
   for (var i in this.config.outputs) {
     output = this.config.outputs[i];
     counts.push({name:output.name, count:count(output.filter)});
