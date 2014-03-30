@@ -124,7 +124,6 @@
             </div>
           </div>
         </div>
-        <pre class="bg-default" id='count'>No files loaded.</pre>
       </div>
       <!-- END PREVIEW -->
     </div>
@@ -135,10 +134,7 @@
   <!-- FOOTER -->
   <div class='sticky-footer'>
     <div class="btn-group" id='tooltip' data-toggle="tooltip" data-placement="top" title="Click to download">
-      <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">This is my custom output</button>
-      <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Chuck's family</button>
-      <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Another download</button>
-      <button type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download()">Angular download</button>
+      <button ng-repeat="output in outputs" type="button" id='download' class="btn btn-default btn-sm pull-left" ng-click="download(output.name)">{{output.name}} ({{output.count}})</button>
     </div>
 
     <button type="button" id='download' class="btn btn-primary pull-right" ng-click="download()"><span class="glyphicon glyphicon-cloud-download"></span> Download All</button>

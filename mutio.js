@@ -7,6 +7,11 @@ function Mutio() {
 
 Mutio.prototype.configure = function(config) {
   this.config = config;
+  // Always add an output for all modified records
+  this.config.outputs.push({
+    name: 'All modified',
+    filter: function(r) { return true; }
+  });
 }
 
 Mutio.prototype.titlecase = function(field) {
@@ -74,13 +79,14 @@ Mutio.prototype.parseCSV = function(csv) {
 }
 
 Mutio.prototype.processHeader = function(row, transforms) {
+  var new_row = this.clone(row);
   for (var i in transforms) {
     t = transforms[i];
     if (t.alterHeader) {
-      row = t.alterHeader(row);
+      new_row = t.alterHeader(new_row);
     }
   }
-  return row;
+  return new_row;
 }
 
 Mutio.prototype.processRow = function(row, transforms) {
@@ -107,18 +113,19 @@ Mutio.prototype.csvRowToString = function(row) {
 Mutio.prototype.generateOutputs = function() {
   var outputs = [];
   // Compile all our data
-  var header = this.processHeader(this._original.results.fields, this.config.transforms);
+
   // Generate CSV string for each config item
   for (var i in this.config.outputs) {
     var output = this.config.outputs[i];
+    // Filter modified data
     var rows = this._original.results.rows.filter(output.filter);
-
-    var data = this._originalRowToString(header);
+    // First row is our field names
+    var csvString = this.csvRowToString(this._modified.fields);
     for (var j in rows) {
       var processedRow = this.processRow(rows[j], this.config.transforms);
-      data += this._originalRowToString(processedRow);
+      csvString += this.csvRowToString(processedRow);
     }
-    outputs.push({name: output.name, csv: data});
+    outputs.push({name: output.name, csv: csvString});
   }
   return outputs;
 }
@@ -143,9 +150,8 @@ Mutio.prototype.counts = function(config) {
   var counts = [];
   var that = this;
   var count = function(f) {
-    return that._modified.rows.filter(f).length;
+    return that._original.results.rows.filter(f).length;
   }
-  counts.push({name:'Total', count: this._modified.rows.length});
   for (var i in this.config.outputs) {
     output = this.config.outputs[i];
     counts.push({name:output.name, count:count(output.filter)});
@@ -164,7 +170,9 @@ Mutio.prototype.counts = function(config) {
  * @return  {mixed} An array of row objects, or a single row object
  */
 Mutio.prototype.originalFields = function (index) {
-  return (this.isInt(index)) ? this._original.results.fields[index] : this._original.results.fields;
+  return (this.isInt(index))
+    ? this.clone(this._original.results.fields[index])
+    : this.clone(this._original.results.fields);
 }
 
 /**
@@ -173,7 +181,9 @@ Mutio.prototype.originalFields = function (index) {
  * @return  {mixed} An array of row objects, or a single row object
  */
 Mutio.prototype.modifiedFields = function (index) {
-  return (this.isInt(index)) ? this._modified.fields[index] : this._modified.fields;
+  return (this.isInt(index))
+    ? this.clone(this._modified.fields[index])
+    : this.clone(this._modified.fields);
 }
 
 /**
@@ -182,7 +192,9 @@ Mutio.prototype.modifiedFields = function (index) {
  * @return  {mixed} An array of row objects, or a single row object
  */
 Mutio.prototype.original = function (index) {
-  return (this.isInt(index)) ? this._original.results.rows[index] : this._original.results.rows;
+  return (this.isInt(index))
+    ? this.clone(this._original.results.rows[index])
+    : this.clone(this._original.results.rows);
 }
 
 /**
@@ -192,12 +204,12 @@ Mutio.prototype.original = function (index) {
  */
 Mutio.prototype.modified = function (args) {
   if (this.isInt(args)) {
-    return this._modified.rows[args];
+    return this.clone(this._modified.rows[args]);
   } else if (args instanceof Object && args.output) {
       var filter = this.outputConfig(args.output).filter;
       return this._modified.rows.filter(filter);
   } else {
-    return this._modified.rows;
+    return this.clone(this._modified.rows);
   }
 }
 

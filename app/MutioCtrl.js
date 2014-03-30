@@ -31,15 +31,6 @@ function MutioCtrl($scope) {
     });
     M.parseCSV(sample_csv);
 
-    $scope.updateCounts();
-  }
-
-  $scope.updateCounts = function() {
-    // Display output counts
-    var counts = M.counts();
-    $("#count").text(counts.reduce(function(p, n){
-      return p + n.name + ": " + n.count + "\n";
-    }, ''));
   }
 
   $scope.readFile = function(input) {
@@ -49,7 +40,6 @@ function MutioCtrl($scope) {
       var FR = new FileReader();
       FR.onload = function(e) {
         M.parseCSV(e.target.result);
-        $scope.updateCounts();
       };
       FR.readAsText(input.files[0]);
 
@@ -72,14 +62,26 @@ function MutioCtrl($scope) {
   }
 
   // Generate outputs and trigger CSV download for each
-  $scope.download = function() {
+  $scope.download = function(name) {
+
+    name = name || null;
+
     var outputs = M.generateOutputs();
-    outputs.map(function(output){
-      csvDownload(output.csv, output.name);
-    });
+
+    if (name) {
+      var output = outputs.filter(function(o){ return o.name == name; })[0];
+      // Download the single output specified
+      csvDownload(output.csv, name);
+    } else {
+      // No output specified, download all
+      outputs.map(function(output){
+        csvDownload(output.csv, output.name);
+      });
+    }
   }
 
   $scope.unsorted = function(obj){
+    // Appropriated from http://stackoverflow.com/questions/19287716/skip-ng-repeat-json-ordering-in-angular-js
     return (!obj) ? [] : Object.keys(obj).slice(0,-1) ;
   }
 
@@ -89,7 +91,6 @@ function MutioCtrl($scope) {
   $scope.originalRows = M.original();
   $scope.modifiedFields = M.modifiedFields();
   $scope.modifiedRows = M.modified();
+  $scope.outputs = M.counts();
 
 }
-
-

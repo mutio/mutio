@@ -17,15 +17,9 @@
   ],
   outputs: [
   {
-    name: "All",
-    filter: function(r){
-      return true;
-    }
-  },
-  {
     name: "Chuck\'s Family",
     filter: function(r){
-      return r["last_name"] == "Norris";
+      return r["last_name"] == "norris";
     }
   }
   ]
