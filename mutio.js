@@ -1,4 +1,3 @@
-
 function Mutio() {
   this.config = {};
   this._original = {};
@@ -158,8 +157,6 @@ Mutio.prototype.counts = function(config) {
   }
   return counts;
 }
-
-
 
 
 /* RESTful API */

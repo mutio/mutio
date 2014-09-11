@@ -1,4 +1,4 @@
-mutio
+Mutio
 =====
 
 A javascript utility that allows you to write repeatable transformations for data sets and create outputs from the results.
